@@ -80,7 +80,6 @@ const AccountProfile = ({ user }: PropsUserData) => {
         values.profile_photo = imgRes[0].fileUrl;
       }
     }
-    console.log(values);
 
     await updateUser({
       userID: user.id,

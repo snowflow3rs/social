@@ -10,12 +10,12 @@ const Home = async () => {
   const resultPost = await fetchPosts(1, 20);
   const user = await currentUser();
   if (!user) return null;
-  // const userInfor = await fetchUser(user.id)
-  // if (!userInfor?.onboarded) redirect("/onboarding");
+  const userInfor = await fetchUser(user.id);
+  if (!userInfor?.onboarded) redirect("/onboarding");
 
   return (
     <>
-      <h1 className="head-text text-left">home</h1>
+      <h1 className="head-text text-left">Home</h1>
       <section className=" mt-9 flex flex-col gap-10">
         {resultPost.posts.length === 0 ? (
           <p>no thread found</p>
@@ -25,6 +25,7 @@ const Home = async () => {
               <ThreadCard
                 key={post._id}
                 id={post._id}
+                imgThread={post?.image}
                 currentUserId={user?.id}
                 parentId={post.parentId}
                 content={post.text}

@@ -17,34 +17,70 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
+import { isBase64Image } from "@/lib/utils";
 
 import { updateUser } from "@/lib/actions/user.action";
 import { usePathname, useRouter } from "next/navigation";
 import { threadValidation } from "@/lib/validations/thread";
 import { createThread } from "@/lib/actions/thread.action";
-
+import { useUploadThing } from "@/lib/uploadThing";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import { MdDeleteForever } from "react-icons/md";
 const PostThreads = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const pathname = usePathname();
-
+  const [files, setFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing("media");
   const form = useForm({
     resolver: zodResolver(threadValidation),
     defaultValues: {
       thread: "",
+      image_thread: "",
       accountId: userId,
     },
   });
+  const handleImage = (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (values: string) => void
+  ) => {
+    e.preventDefault();
+
+    const fileReader = new FileReader();
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+
+      setFiles(Array.from(e.target.files));
+      if (!file.type.includes("image")) return;
+
+      fileReader.onload = async (event) => {
+        const imgDataURL = event.target?.result?.toString() || "";
+
+        fieldChange(imgDataURL);
+      };
+      fileReader.readAsDataURL(file);
+    }
+  };
 
   const onSubmit = async (values: z.infer<typeof threadValidation>) => {
+    const blod = values.image_thread;
+    const hasImageChange = isBase64Image(blod);
+    if (hasImageChange) {
+      const imgRes = await startUpload(files);
+      if (imgRes && imgRes[0].fileUrl) {
+        values.image_thread = imgRes[0].fileUrl;
+      }
+    }
     await createThread({
       text: values.thread,
+      image: values.image_thread,
       author: userId,
       communityId: null,
       path: pathname,
     });
-
+    console.log(values);
     router.push("/");
   };
+
   return (
     <Form {...form}>
       <form
@@ -61,10 +97,51 @@ const PostThreads = ({ userId }: { userId: string }) => {
               </FormLabel>
               <FormControl className=" no-focus border border-dark-4  bg-dark-3 text-light-1">
                 <Textarea
-                  rows={15}
-                  placeholder="Enter your name"
+                  rows={8}
+                  placeholder="Enter your content... "
                   className=" account-form_input "
                   {...field}
+                />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="image_thread"
+          render={({ field }) => (
+            <FormItem className="flex flex-col pb-[50px]  items-center gap-4">
+              <FormLabel className=" flex justify-center items-center  w-full   border-dashed border-2 border-sky-500 ">
+                {field.value ? (
+                  <Image
+                    src={field.value}
+                    alt=""
+                    width={300}
+                    height={500}
+                    priority
+                    className=" rounded-md object-contain"
+                  />
+                ) : (
+                  <div className=" flex flex-col justify-center items-center cursor-pointer">
+                    <AiOutlineCloudUpload className="  text-red-50  w-[100px] h-[100px]" />
+                    <FormDescription className="pb-[20px]">
+                      Select image and Upload your post
+                    </FormDescription>
+                  </div>
+                )}
+              </FormLabel>
+
+              <FormControl className="flex-1 text-base-semibold text-gray-200 ">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  placeholder="Upload a photo"
+                  className="w-[100%]   "
+                  onChange={(e) => {
+                    handleImage(e, field.onChange);
+                  }}
                 />
               </FormControl>
 

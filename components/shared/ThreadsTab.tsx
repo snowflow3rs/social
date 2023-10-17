@@ -11,6 +11,7 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: Props) => {
   const result = await fetchUserPosts(accountId);
 
   if (!result) redirect("/");
+  console.log(result);
 
   return (
     <section className="mt-9 flex flex-col gap-10">
@@ -18,6 +19,7 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: Props) => {
         <ThreadCard
           key={thread._id}
           id={thread._id}
+          imgThread={thread.image}
           currentUserId={currentUserId}
           parentId={thread.parentId}
           content={thread.text}

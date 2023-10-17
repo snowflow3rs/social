@@ -1,17 +1,20 @@
 import AccountProfile from "@/components/form/AccountProfile";
+import { fetchUser } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 const onBoarding: React.FC = async () => {
   const user = await currentUser();
-
-  const userInfor = {};
+  if (!user) return null;
+  const userInfor = await fetchUser(user.id);
+  if (!userInfor?.onboarded) redirect("/onboarding");
 
   const userData = {
-    id: user?.id,
+    id: user.id,
     objectId: userInfor?._id,
-    username: userInfor?.username || user?.username,
-    name: userInfor?.name || user?.name,
-    bio: userInfor?.bio || "",
-    image: userInfor?.image || user?.imageUrl,
+    username: userInfor ? userInfor?.username : user.username,
+    name: userInfor ? userInfor?.name : user.firstName ?? "",
+    bio: userInfor ? userInfor?.bio : "",
+    image: userInfor ? userInfor?.image : user.imageUrl,
   };
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start px-10 py-20 ">
@@ -20,7 +23,7 @@ const onBoarding: React.FC = async () => {
         Complete your profile now to use Threads
       </p>
       <section className="mt-9 bg-dark-2 p-10">
-        <AccountProfile user={userData} />
+        <AccountProfile user={userData} btnTitle="Continue" />
       </section>
     </main>
   );

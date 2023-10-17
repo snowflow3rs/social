@@ -7,20 +7,24 @@ import { connectDB } from "../mongoose";
 
 interface Params {
   text: string;
+  image: string;
   author: string;
   communityId: string | null;
   path: string;
 }
 export const createThread = async ({
   text,
+  image,
   author,
   communityId,
+
   path,
 }: Params) => {
   try {
     connectDB();
     const create = await Thread.create({
       text,
+      image,
       author,
       communityId: null,
     });

@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 interface Props {
   id: string;
+  imgThread: string;
   currentUserId: string;
   parentId: string | null;
   content: string;
@@ -29,6 +30,7 @@ interface Props {
 }
 const ThreadCard = ({
   id,
+  imgThread,
   currentUserId,
   parentId,
   content,
@@ -67,6 +69,17 @@ const ThreadCard = ({
             </Link>
 
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
+
+            {imgThread ? (
+              <Image
+                src={imgThread}
+                width={680}
+                height={500}
+                alt="Post Image"
+              />
+            ) : (
+              <></>
+            )}
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
                 <Image

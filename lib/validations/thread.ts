@@ -2,6 +2,7 @@ import * as z from "zod";
 
 export const threadValidation = z.object({
   thread: z.string().nonempty().min(3, { message: "Minimum 3 characters" }),
+  image_thread: z.string().url(),
   accountId: z.string(),
 });
 
