@@ -11,8 +11,6 @@ const CreateThread = async () => {
 
   const userInfor = await fetchUser(user.id);
 
-  console.log(userInfor);
-
   if (!userInfor?.onboarded) redirect("/onboarding");
   return (
     <>

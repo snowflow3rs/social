@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
@@ -25,7 +26,7 @@ import { threadValidation } from "@/lib/validations/thread";
 import { createThread } from "@/lib/actions/thread.action";
 import { useUploadThing } from "@/lib/uploadThing";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { MdDeleteForever } from "react-icons/md";
+
 const PostThreads = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -62,14 +63,19 @@ const PostThreads = ({ userId }: { userId: string }) => {
   };
 
   const onSubmit = async (values: z.infer<typeof threadValidation>) => {
-    const blod = values.image_thread;
-    const hasImageChange = isBase64Image(blod);
-    if (hasImageChange) {
-      const imgRes = await startUpload(files);
-      if (imgRes && imgRes[0].fileUrl) {
-        values.image_thread = imgRes[0].fileUrl;
+    if (!values.image_thread) {
+      values.image_thread = ""; // Set it to an empty string or handle as needed
+    } else {
+      const blod = values.image_thread;
+      const hasImageChange = isBase64Image(blod);
+      if (hasImageChange) {
+        const imgRes = await startUpload(files);
+        if (imgRes && imgRes[0].fileUrl) {
+          values.image_thread = imgRes[0].fileUrl;
+        }
       }
     }
+
     await createThread({
       text: values.thread,
       image: values.image_thread,
@@ -77,7 +83,7 @@ const PostThreads = ({ userId }: { userId: string }) => {
       communityId: null,
       path: pathname,
     });
-    console.log(values);
+
     router.push("/");
   };
 

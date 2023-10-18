@@ -76,6 +76,7 @@ const ThreadCard = ({
                 width={680}
                 height={500}
                 alt="Post Image"
+                className="rounded-[10px] pt-[14px]"
               />
             ) : (
               <></>

@@ -16,11 +16,9 @@ const page = async () => {
 
   const activity = await getActivity(userInfo._id);
 
-  console.log(activity);
-
   return (
     <>
-      <h1 className="head-text">Activity</h1>
+      <h1 className="head-text">Notifications</h1>
 
       <section className="mt-10 flex flex-col gap-5">
         {activity.length > 0 ? (

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import Thread from "../models/thread";
 import User from "../models/user";
 import { connectDB } from "../mongoose";
+import Community from "../models/community";
 
 interface Params {
   text: string;
@@ -54,6 +55,10 @@ export const fetchPosts = async (pageNum = 1, pageSize = 20) => {
         model: User,
       })
       .populate({
+        path: "community",
+        model: Community,
+      })
+      .populate({
         path: "children", // Populate the children field
         populate: {
           path: "author", // Populate the author field within children
@@ -83,11 +88,11 @@ export const fetchThreadById = async (id: string) => {
         model: User,
         select: "_id id name image",
       }) // Populate the author field with _id and username
-      // .populate({
-      //   path: "community",
-      //   model: Community,
-      //   select: "_id id name image",
-      // }) // Populate the community field with _id and name
+      .populate({
+        path: "community",
+        model: Community,
+        select: "_id id name image",
+      }) // Populate the community field with _id and name
       .populate({
         path: "children", // Populate the children field
         populate: [
