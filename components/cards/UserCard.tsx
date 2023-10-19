@@ -12,6 +12,7 @@ interface Props {
 }
 const UserCard = ({ id, username, name, imgUrl, userType }: Props) => {
   const route = useRouter();
+  const isCommunity = userType === "Community";
   return (
     <article className="user-card">
       <div className="user-card_avatar">
@@ -30,7 +31,13 @@ const UserCard = ({ id, username, name, imgUrl, userType }: Props) => {
       </div>
       <Button
         className="user-card_btn"
-        onClick={() => route.push(`/profile/${id}`)}
+        onClick={() => {
+          if (isCommunity) {
+            route.push(`/communities/${id}`);
+          } else {
+            route.push(`/profile/${id}`);
+          }
+        }}
       >
         View
       </Button>
