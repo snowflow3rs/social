@@ -40,6 +40,36 @@ const ThreadCard = ({
   comments,
   isComment,
 }: Props) => {
+  // handle down the line and when posting test it was a url
+  const formatContent = (content: string) => {
+    const lines = content.split("\n").map((line, index) => {
+      const urlRegex = /https?:\/\/\S+/g;
+
+      const matches = line.match(urlRegex);
+
+      if (matches) {
+        // Replace each URL with a clickable link
+        matches.forEach((url) => {
+          const replacedLine = line.replace(
+            url,
+            `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: rgb(29, 155, 240); text-decoration: none; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" >${url}</a>`
+          );
+          line = replacedLine;
+        });
+
+        return <p key={index} dangerouslySetInnerHTML={{ __html: line }} />;
+      } else {
+        return (
+          <React.Fragment key={index}>
+            {line}
+            <br />
+          </React.Fragment>
+        );
+      }
+    });
+
+    return <div>{lines}</div>;
+  };
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
@@ -68,7 +98,9 @@ const ThreadCard = ({
               </h4>
             </Link>
 
-            <p className="mt-2 text-small-regular text-light-2">{content}</p>
+            <p className="mt-2 text-small-regular text-light-2">
+              {formatContent(content)}
+            </p>
 
             {imgThread ? (
               <Image
