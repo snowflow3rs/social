@@ -50,14 +50,11 @@ const ThreadCard = ({
       if (matches) {
         // Replace each URL with a clickable link
         matches.forEach((url) => {
-          const replacedLine = line.replace(
-            url,
-            `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: rgb(29, 155, 240); text-decoration: none; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'" >${url}</a>`
-          );
-          line = replacedLine;
+          const link = `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: rgb(29, 155, 240); text-decoration: none; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${url}</a>`;
+          line = line.replace(url, link);
         });
 
-        return <p key={index} dangerouslySetInnerHTML={{ __html: line }} />;
+        return <span key={index} dangerouslySetInnerHTML={{ __html: line }} />;
       } else {
         return (
           <React.Fragment key={index}>
@@ -68,8 +65,9 @@ const ThreadCard = ({
       }
     });
 
-    return <div>{lines}</div>;
+    return <React.Fragment>{lines}</React.Fragment>;
   };
+
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
