@@ -1,7 +1,8 @@
 import Link from "next/link";
 import React from "react";
-
 import Image from "next/image";
+import { formatDateString } from "@/lib/utils";
+
 interface Props {
   id: string;
   imgThread: string;
@@ -18,7 +19,7 @@ interface Props {
     image: string;
     id: string;
   } | null;
-  createAt: string;
+  createdAt: string;
   comments: {
     author: {
       name: string;
@@ -36,7 +37,7 @@ const ThreadCard = ({
   content,
   author,
   community,
-  createAt,
+  createdAt,
   comments,
   isComment,
 }: Props) => {
@@ -182,7 +183,7 @@ const ThreadCard = ({
           className="mt-5 flex items-center"
         >
           <p className="text-subtle-medium text-gray-1">
-            {/* {formatDateString(createdAt)} */}
+            {formatDateString(createdAt)}
             {community && ` - ${community.name} Community`}
           </p>
 
@@ -195,6 +196,9 @@ const ThreadCard = ({
           />
         </Link>
       )}
+      <p className="text-subtle-medium text-gray-1 pt-[10px]">
+        {formatDateString(createdAt)}
+      </p>
     </article>
   );
 };
