@@ -16,6 +16,9 @@ const page = async ({ params }: { params: { id: string } }) => {
   if (!userInfor?.onboarded) redirect("/onboarding");
 
   const thread = await fetchThreadById(params.id);
+
+  console.log(thread);
+
   return (
     <section className="relative">
       <div>
@@ -28,7 +31,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           content={thread.text}
           author={thread.author}
           community={thread.community}
-          createAt={thread.createAt}
+          createdAt={thread.createdAt}
           comments={thread.children}
         />
       </div>
@@ -50,7 +53,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             content={childItem.text}
             author={childItem.author}
             community={childItem.community}
-            createAt={childItem.createAt}
+            createdAt={childItem.createdAt}
             comments={childItem.children}
             isComment
           />
