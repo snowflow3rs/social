@@ -7,7 +7,13 @@ import Image from "next/image";
 import ProfileHead from "@/components/shared/ProfileHead";
 import { profileTabs } from "@/constant";
 import UserCard from "@/components/cards/UserCard";
-const page = async () => {
+import { SearchBar } from "@/components/shared/SearchBar";
+import Pagination from "@/components/shared/Pagination";
+const page = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
   const user = await currentUser();
 
   if (!user) return null;
@@ -16,15 +22,15 @@ const page = async () => {
 
   const result = await fetchSearchUser({
     userId: user.id,
-    searchString: "",
-    pageNumber: 1,
-    pageSize: 20,
-    sortBy: "desc",
+    searchString: searchParams.q,
+    pageNumber: searchParams?.page ? +searchParams.page : 1,
+    pageSize: 25,
   });
+
   return (
     <section>
       <h1 className=" head-text mb-10">Search</h1>
-
+      <SearchBar routeType="search" tabIndex={-1} />
       <div className="mt-14 flex flex-col  gap-9">
         {result.users.length === 0 ? (
           <p className="no-result">No Users</p>
@@ -43,6 +49,11 @@ const page = async () => {
           </>
         )}
       </div>
+      <Pagination
+        path="search"
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        isNext={result.isNext}
+      />
     </section>
   );
 };

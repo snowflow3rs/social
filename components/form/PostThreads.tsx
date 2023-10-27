@@ -127,6 +127,7 @@ const PostThreads = ({ userId }: { userId: string }) => {
                     width={300}
                     height={500}
                     priority
+                    loading="lazy"
                     className=" rounded-md object-contain"
                   />
                 ) : (

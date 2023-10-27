@@ -172,6 +172,9 @@ module.exports = {
       ],
     },
     extend: {
+      backgroundColor: {
+        custom: "rgba(22, 24, 35, 0.06)",
+      },
       colors: {
         "primary-500": "#877EFF",
         "secondary-500": "#FFB620",

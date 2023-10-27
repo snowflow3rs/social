@@ -41,6 +41,9 @@
   .user-card {
     @apply flex flex-col justify-between gap-4 max-xs:rounded-xl max-xs:bg-dark-3 max-xs:p-4 xs:flex-row xs:items-center;
   }
+  .user-search-card {
+    @apply flex flex-col justify-between gap-4 max-xs:rounded-xl max-xs:bg-dark-3 max-xs:p-4 xs:flex-row xs:items-center;
+  }
 
   .user-card_avatar {
     @apply flex flex-1 items-start justify-start gap-3 xs:items-center;
@@ -51,11 +54,11 @@
   }
 
   .searchbar {
-    @apply flex gap-1 rounded-lg bg-dark-3 px-4 py-2;
+    @apply flex gap-1 rounded-lg bg-dark-4 px-4 py-2;
   }
 
   .searchbar_input {
-    @apply border-none bg-dark-3 text-base-regular text-light-4 outline-none !important;
+    @apply border-none bg-dark-4 text-base-regular text-light-4 outline-none !important;
   }
 
   .topbar {
