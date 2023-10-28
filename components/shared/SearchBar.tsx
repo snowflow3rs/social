@@ -122,7 +122,7 @@ export const SearchBar = ({ routeType, tabIndex, data }: Props) => {
             onChange={handleInput}
             onFocus={() => setShowResult(true)}
             placeholder={`${
-              routeType !== "/search" ? "Search communities" : "Search creators"
+              routeType !== "/search" ? "Search " : "Search creators"
             }`}
             className="no-focus searchbar_input  w-[400px] "
           />
@@ -131,9 +131,6 @@ export const SearchBar = ({ routeType, tabIndex, data }: Props) => {
     </div>
   );
 };
-// setTimeout(() => {
-//   setSearchResult([]);
-// }, 500);
 
 // const delayDebounceFn = setTimeout(() => {
 //   if (searchValue) {

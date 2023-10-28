@@ -119,7 +119,7 @@ const PostThreads = ({ userId }: { userId: string }) => {
           name="image_thread"
           render={({ field }) => (
             <FormItem className="flex flex-col pb-[50px]  items-center gap-4">
-              <FormLabel className=" flex justify-center items-center  w-full   border-dashed border-2 border-sky-500 ">
+              <FormLabel className=" flex justify-center items-center  w-full   border-dashed border-2 border-zinc-600   ">
                 {field.value ? (
                   <Image
                     src={field.value}

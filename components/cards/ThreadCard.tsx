@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { formatDateString } from "@/lib/utils";
+import DeleteThread from "../form/DeleteThreads";
 
 interface Props {
   id: string;
@@ -92,7 +93,7 @@ const ThreadCard = ({
 
           <div className=" flex w-full flex-col ">
             <Link href={`profile/${author.id}`} className="w-fit">
-              <h4 className="cursor-pointer text-light-1 text-base-semibold">
+              <h4 className="flex cursor-pointer text-light-1 text-base-semibold">
                 {author.name}
               </h4>
             </Link>
@@ -155,8 +156,18 @@ const ThreadCard = ({
               )}
             </div>
           </div>
+          <div>
+            <DeleteThread
+              threadId={JSON.stringify(id)}
+              currentUserId={currentUserId}
+              authorId={author.id}
+              parentId={parentId}
+              isComment={isComment}
+            />
+          </div>
         </div>
       </div>
+
       {!isComment && comments.length > 0 && (
         <div className="ml-1 mt-3 flex items-center gap-2">
           {comments.slice(0, 2).map((comment, index) => (
