@@ -1,57 +1,28 @@
-"use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { sidebarLinks } from "@/constant";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
-import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
+import { useRouter, usePathname, redirect } from "next/navigation";
+import { SignOutButton, SignedIn, currentUser, useAuth } from "@clerk/nextjs";
+import { fetchUser, getActivity } from "@/lib/actions/user.action";
+import SignOut from "./SignOut";
+import ItemBar from "./ItemBar";
 
-const LeftSideBar: React.FC = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const { userId } = useAuth();
+const LeftSideBar = async () => {
+  const user = await currentUser();
+  if (!user) return null;
+
+  const userInfo = await fetchUser(user.id);
+
+  if (!userInfo?.onboarded) redirect("/onboarding");
+
+  const activity = await getActivity(userInfo._id);
+  const data = activity.length;
+
   return (
     <section className="custom-scrollbar leftsidebar">
-      <div className="flex w-full flex-1 flex-col gap-6 px-6">
-        {sidebarLinks.map((link) => {
-          const isActived =
-            (pathname.includes(link.route) && link.route.length > 1) ||
-            pathname === link.route;
-
-          if (link.route === "/profile") {
-            link.route = `${link.route}/${userId}`;
-          }
-          return (
-            <Link
-              href={link.route}
-              key={link.label}
-              className={`leftsidebar_link ${isActived && "bg-primary-500"}`}
-            >
-              <Image
-                src={link.imgURL}
-                alt={link.label}
-                width={24}
-                height={24}
-              />
-              <p className="text-light-1 max-lg:hidden"> {link.label}</p>
-            </Link>
-          );
-        })}
-      </div>
-      <div className="mt-10 px-6">
-        <SignedIn>
-          <SignOutButton
-            signOutCallback={() => {
-              router.push("/sign-in");
-            }}
-          >
-            <div className="flex cursor-pointer gap-4 p-4">
-              <Image src="/assets/logout.svg" alt="" width={24} height={24} />
-              <p className="text-light-2 max-lg:hidden">Logout</p>
-            </div>
-          </SignOutButton>
-        </SignedIn>
-      </div>
+      <ItemBar data={data} />
+      <SignOut />
     </section>
   );
 };
