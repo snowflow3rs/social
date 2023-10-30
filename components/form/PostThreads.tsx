@@ -3,7 +3,6 @@ import React, { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userValidation } from "@/lib/validations/user";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,7 +19,6 @@ import Image from "next/image";
 import { Textarea } from "../ui/textarea";
 import { isBase64Image } from "@/lib/utils";
 
-import { updateUser } from "@/lib/actions/user.action";
 import { usePathname, useRouter } from "next/navigation";
 import { threadValidation } from "@/lib/validations/thread";
 import { createThread } from "@/lib/actions/thread.action";

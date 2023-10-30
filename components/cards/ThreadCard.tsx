@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { formatDateString } from "@/lib/utils";
+import { formatDateString, multiFormatDateString } from "@/lib/utils";
 import DeleteThread from "../form/DeleteThreads";
 
 interface Props {
@@ -96,6 +96,9 @@ const ThreadCard = ({
               <h4 className="flex cursor-pointer text-light-1 text-base-semibold">
                 {author.name}
               </h4>
+              <p className="text-subtle-medium text-gray-1 pt-[2px]">
+                {multiFormatDateString(createdAt)}
+              </p>
             </Link>
 
             <p className="mt-2 text-small-regular text-light-2">
