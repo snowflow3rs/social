@@ -54,6 +54,7 @@ export const fetchPosts = async (pageNum = 1, pageSize = 20) => {
         path: "author",
         model: User,
       })
+
       .populate({
         path: "community",
         model: Community,
@@ -220,5 +221,24 @@ export async function deleteThread(id: string, path: string): Promise<void> {
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Failed to delete thread: ${error.message}`);
+  }
+}
+
+export async function likePosts(postId: string, likeArray: string[]) {
+  try {
+    connectDB();
+
+    const updatePosted = await Thread.findByIdAndUpdate(
+      postId,
+      { $addToSet: { likes: likeArray } },
+      { new: true }
+    );
+
+    if (!updatePosted) {
+      throw new Error("Post not found");
+    }
+    return updatePosted;
+  } catch (error: any) {
+    throw new Error(`Failed to update like Post: ${error.message}`);
   }
 }

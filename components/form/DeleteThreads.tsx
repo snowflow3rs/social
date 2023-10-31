@@ -28,8 +28,8 @@ function DeleteThread({
     <Image
       src="/assets/delete.svg"
       alt="delte"
-      width={30}
-      height={30}
+      width={24}
+      height={24}
       className="cursor-pointer object-contain rounded-md hover:bg-red-400"
       onClick={async () => {
         await deleteThread(JSON.parse(threadId), pathname);

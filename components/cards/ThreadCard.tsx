@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { formatDateString, multiFormatDateString } from "@/lib/utils";
 import DeleteThread from "../form/DeleteThreads";
+import HeartStat from "../shared/HeartStat";
 
 interface Props {
   id: string;
@@ -28,6 +29,8 @@ interface Props {
       id: string;
     };
   }[];
+
+  likes: string[];
   isComment?: boolean;
 }
 const ThreadCard = ({
@@ -40,6 +43,7 @@ const ThreadCard = ({
   community,
   createdAt,
   comments,
+  likes,
   isComment,
 }: Props) => {
   // handle down the line and when posting test it was a url
@@ -106,24 +110,20 @@ const ThreadCard = ({
             </p>
 
             {imgThread ? (
-              <Image
+              <img
                 src={imgThread}
-                width={680}
-                height={500}
                 alt="Post Image"
-                className="rounded-[10px] pt-[14px]"
+                className=" pt-[14px]  flex items-center   rounded-lg  lg:base-medium"
               />
             ) : (
               <></>
             )}
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
-                <Image
-                  src="/assets/heart-gray.svg"
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className=" cursor-pointer object-contain"
+                <HeartStat
+                  postId={JSON.stringify(id)}
+                  likes={likes}
+                  userId={JSON.stringify(currentUserId)}
                 />
                 <Link href={`/thread/${id}`}>
                   <Image

@@ -6,12 +6,19 @@ import { redirect } from "next/navigation";
 
 import React from "react";
 
-const Home = async () => {
-  const resultPost = await fetchPosts(1, 20);
+const Home = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
   const user = await currentUser();
   if (!user) return null;
   const userInfor = await fetchUser(user.id);
   if (!userInfor?.onboarded) redirect("/onboarding");
+  const resultPost = await fetchPosts(
+    searchParams.page ? +searchParams.page : 1,
+    30
+  );
 
   return (
     <>
@@ -19,7 +26,7 @@ const Home = async () => {
         className="head-text
        text-left"
       >
-        Home
+        Feed
       </h1>
       <section className=" mt-9 flex flex-col gap-10">
         {resultPost.posts.length === 0 ? (
@@ -38,6 +45,7 @@ const Home = async () => {
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}
+                likes={post.likes}
               />
             ))}
           </>
